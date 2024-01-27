@@ -1,17 +1,18 @@
 from concurrent.futures import ThreadPoolExecutor
-from discord import SlashCommandGroup
 from collections.abc import Mapping
 from asyncio import get_event_loop
 from .models import LastUpdate
+from secrets import token_hex
 from zlib import decompress
 from aiofiles import open
 from os.path import isdir
-from typing import Any
+from time import time
 from os import walk
 from re import sub
 
 
 sizes = ['bytes','KBs','MBs','GBs','TBs','PBs','EBs','ZBs','YBs']
+token_epoch = 1620198608689
 base69chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_~;$*,'
 
 def merge_dicts(*dicts:dict) -> dict:
@@ -85,6 +86,9 @@ def decode_b69(b69:str) -> int:
 	for i in range(len(b69)):
 		b10 += base69chars.index(b69[i])*(69**(len(b69)-i-1))
 	return b10
+
+def generate_token(user_id:int) -> str:
+	return f'{encode_b69(user_id)}.{encode_b69(int((time()*1000)-token_epoch))}.{encode_b69(int(token_hex(20),16))}'
 
 async def get_last_update(git_branch:str) -> LastUpdate:
 	async with open(f'.git/refs/heads/{git_branch}','r') as f:
