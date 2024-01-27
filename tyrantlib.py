@@ -74,17 +74,17 @@ def split_list(lst:list,size:int) -> list:
 		yield lst[i:i+size]
 
 def encode_b69(b10:int) -> str:
-    b69 = ''
-    while b10:
-        b69 = base69chars[b10%69]+b69
-        b10 //= 69
-    return b69
+	b69 = ''
+	while b10:
+		b69 = base69chars[b10%69]+b69
+		b10 //= 69
+	return b69
 
 def decode_b69(b69:str) -> int:
-    b10 = 0
-    for i in range(len(b69)):
-        b10 += base69chars.index(b69[i])*(69**(len(b69)-i-1))
-    return b10
+	b10 = 0
+	for i in range(len(b69)):
+		b10 += base69chars.index(b69[i])*(69**(len(b69)-i-1))
+	return b10
 
 async def get_last_update(git_branch:str) -> LastUpdate:
 	async with open(f'.git/refs/heads/{git_branch}','r') as f:
