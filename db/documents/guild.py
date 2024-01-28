@@ -58,6 +58,7 @@ class Guild(Document):
 			role:Optional[int] = Field(None,description='role given to the user')
 			time:str = Field('00:00',min_length=5,max_length=5,pattern=r'^\d{2}:\d{2}$',description='time of day to give new talking stick\n\nformat: HH:MM (24 hour)')
 			limit:Optional[int] = Field(None,description='role that limits who can get the talking stick\n\nif not set, all users can get the talking stick')
+			announcement_message:str = Field('congrats {user} you have the talking stick.',max_length=200,description='message sent when a user gets the talking stick\n\nformat: {user} is replaced with the user\'s mention')
 
 		class GuildConfigSauceNao(BaseModel):
 			api_key:Optional[str] = Field(None,description='sauce nao api key\n\nif not set, the default api key will be used (with a very low limit)]\n\nget an api key at https://saucenao.com/user.php?page=account-upgrades')
