@@ -23,9 +23,11 @@ class Logger:
 		# 				raise Exception(f'Logger failed with status {resp.status}\n{await resp.text()}')
 
 
-	async def _log(self,message:str,label:str,guild_id:int|None=None,metadata:dict|None=None) -> None:
+	def _log(self,message:str,label:str,guild_id:int|None=None,metadata:dict|None=None) -> None:
 		print(f'[{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}] [{self.logstream.upper()}] [{label}] {message}')
-		return
+		# create_task(self._log_to_parseable(message,label,guild_id,metadata))
+
+	async def _log_to_parseable(self,message:str,label:str,guild_id:int|None=None,metadata:dict|None=None) -> None:
 		headers = {
 			**self.headers,
 			f'X-P-Tag-label':label,
@@ -38,9 +40,9 @@ class Logger:
 					if resp.status != 200:
 						raise Exception(f'Logger failed with status {resp.status}\n{await resp.text()}')
 			except Exception:
-				print('failed to log message')
+				print('failed to log message to parseable')
 
-	def custom(self,label:str,message:str,guild_id:int|None=None,**metadata) -> None: create_task(self._log(message,label.upper(),guild_id,metadata))
+	def custom(self,label:str,message:str,guild_id:int|None=None,**metadata) -> None: self._log(message,label.upper(),guild_id,metadata)
 	def info(self,message:str,guild_id:int|None=None,**metadata)             -> None: self.custom('info',message,guild_id,**metadata)
 	def error(self,message:str,guild_id:int|None=None,**metadata)            -> None: self.custom('error',message,guild_id,**metadata)
 	def warning(self,message:str,guild_id:int|None=None,**metadata)          -> None: self.custom('warning',message,guild_id,**metadata)

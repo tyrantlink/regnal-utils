@@ -29,6 +29,9 @@ class User(Document):
 			speaking_rate:float = Field(0.8,ge=0.25,le=4,description='speaking rate used by tts')
 			text_correction:bool = Field(True,description='silently corrects text so it\'s more accurately pronounced')
 
+		class UserConfigAutoResponses(BaseModel):
+			disabled:list[str] = Field([],description='auto responses disabled')
+
 		general:UserConfigGeneral = Field(description='general options')
 		tts:UserConfigTTS = Field(description='text-to-speech options')
 
@@ -39,7 +42,6 @@ class User(Document):
 
 		class UserDataAutoResponses(BaseModel):
 			found:list[str] = Field([],description='auto responses found')
-			disabled:list[str] = Field([],description='auto responses disabled')
 
 		class UserDataStatistics(BaseModel):
 			messages:dict[str,int] = Field({},description='message counts by guild id\n\nlegacy data under _legacy')

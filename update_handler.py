@@ -108,5 +108,3 @@ class UpdateHandler:
 					case _: continue
 			for action,arg in actions:
 				await action(arg)
-
- 

@@ -17,7 +17,7 @@ async def _find_start_commit(commits:dict[str,str]) -> dict[str,str]:
 			break
 		del commits[commit]
 	return commits
-	
+
 def calculate_version(commits:dict[str,str]) -> list[int]:
 	version = START_VERSION.copy()
 	for message in commits.values():
