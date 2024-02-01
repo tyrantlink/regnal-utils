@@ -13,7 +13,7 @@ from re import sub
 
 sizes = ['bytes','KBs','MBs','GBs','TBs','PBs','EBs','ZBs','YBs']
 token_epoch = 1620198608689
-base69chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_~;$*,'
+base66chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-_~'
 
 def merge_dicts(*dicts:dict) -> dict:
 	"""priority goes to the last dict"""
@@ -74,21 +74,21 @@ def split_list(lst:list,size:int) -> list:
 	for i in range(0,len(lst),size):
 		yield lst[i:i+size]
 
-def encode_b69(b10:int) -> str:
-	b69 = ''
+def encode_b66(b10:int) -> str:
+	b66 = ''
 	while b10:
-		b69 = base69chars[b10%69]+b69
-		b10 //= 69
-	return b69
+		b66 = base66chars[b10%66]+b66
+		b10 //= 66
+	return b66
 
-def decode_b69(b69:str) -> int:
+def decode_b66(b66:str) -> int:
 	b10 = 0
-	for i in range(len(b69)):
-		b10 += base69chars.index(b69[i])*(69**(len(b69)-i-1))
+	for i in range(len(b66)):
+		b10 += base66chars.index(b66[i])*(66**(len(b66)-i-1))
 	return b10
 
 def generate_token(user_id:int) -> str:
-	return f'{encode_b69(user_id)}.{encode_b69(int((time()*1000)-token_epoch))}.{encode_b69(int(token_hex(20),16))}'
+	return f'{encode_b66(user_id)}.{encode_b66(int((time()*1000)-token_epoch))}.{encode_b66(int(token_hex(20),16))}'
 
 async def get_last_update(git_branch:str) -> LastUpdate:
 	async with open(f'.git/refs/heads/{git_branch}','r') as f:
