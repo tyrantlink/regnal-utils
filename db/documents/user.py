@@ -1,4 +1,4 @@
-from .ext.enums import TTSVoices,TTSMode
+from .ext.enums import GoogleTTSVoices,TTSMode
 from pydantic import BaseModel,Field
 from typing import Optional,Any
 from datetime import timedelta
@@ -20,12 +20,13 @@ class User(Document):
 			talking_stick:bool = Field(True,description='allows you to recieve the talking stick\n\ndisable to remove potential unwanted pings')
 			hide_commands:bool = Field(True,description='commands used will only be visible to you\n\neven disabled, some commands with sensitive information will still be hidden')
 			auto_responses:bool = Field(True,description='enable/disable auto responses\n\nif guild.auto_responses.mode is set to disabled, this will be ignored')
+			developer_mode:bool = Field(False,description='enable developer mode\n\nif enabled, shows more information in some commands, mainly auto responses')
 
 		class UserConfigTTS(BaseModel):
 			mode:TTSMode = Field(TTSMode.only_when_muted,description='when to use tts')
 			name:Optional[str] = Field(...,min_length=1,max_length=32,description='name used by tts\n\nif not set, your current display name will be used')
 			auto_join:bool = Field(False,description='automatically join voice channel\n\nif disabled, you will have to invite tts manually with {cmd_ref[tts join]}')
-			voice:Optional[TTSVoices] = Field(None,description='voice used by tts\n\nif not set, guild.tts.default_voice will be used')
+			voice:Optional[GoogleTTSVoices] = Field(None,description='voice used by tts\n\nif not set, guild.tts.default_voice will be used')
 			speaking_rate:float = Field(0.8,ge=0.25,le=4,description='speaking rate used by tts')
 			text_correction:bool = Field(True,description='silently corrects text so it\'s more accurately pronounced')
 

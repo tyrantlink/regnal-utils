@@ -19,6 +19,8 @@ class _ProjectConfig(BaseModel):
 	base_guilds:list[int] # additional guilds small bots should join (emote servers, etc)
 	git_branch:str # branch to pull from
 	github_secret:str # github webhook secret
+	base_version:list[int] # base version to start with when counting commits
+	start_commit:str # commit to start counting from
 
 class _ProjectWebhooks(BaseModel):
 	support:str # forum channel for issues and suggestions
@@ -51,7 +53,8 @@ class Project(BaseModel):
 	api:_ProjectAPI
 	parseable:_ProjectParseable
 
-class LastUpdate(BaseModel):
+class Version(BaseModel):
+	semantic:str
 	commit:str
 	commit_full:str
 	timestamp:int

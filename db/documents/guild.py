@@ -1,4 +1,4 @@
-from .ext.enums import TWBFMode,AUCooldownMode,TTSVoices
+from .ext.enums import TWBFMode,AUCooldownMode,GoogleTTSVoices
 from pydantic import BaseModel,Field
 from typing import Optional,Any
 from datetime import timedelta
@@ -50,10 +50,10 @@ class Guild(Document):
 		class GuildConfigTTS(BaseModel):
 			enabled:bool = Field(True,description='allow tts to be used')
 			channels:list[int] = Field([],description='channels where tts is allowed\n\nvoice-text channels will always allow tts')
-			default_voice:Optional[TTSVoices] = Field(None,description='default voice used by tts\n\nif not set, the default voice (en-US-Neural2-H) will be used')
+			default_voice:Optional[GoogleTTSVoices] = Field(None,description='default voice used by tts\n\nif not set, the default voice (en-US-Neural2-H) will be used')
 
 		class GuildConfigTalkingStick(BaseModel):
-			enabled:bool = Field(False,description='daily random roll to give an active user a specific role\n\nmeant to give users send_messages permissions in a channel, but can be used for anything')
+			enabled:bool = Field(False,description='daily random roll to give an active user a specific role\n\nintended to give users send_messages permissions in a channel, but can be used for anything')
 			channel:Optional[int] = Field(None,description='channel used to announce the talking stick')
 			role:Optional[int] = Field(None,description='role given to the user')
 			limit:Optional[int] = Field(None,description='role that limits who can get the talking stick\n\nif not set, all users can get the talking stick')

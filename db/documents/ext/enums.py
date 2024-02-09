@@ -8,7 +8,7 @@ class TTSMode(Enum):
 	only_when_muted = 1
 	always = 2
 
-class TTSVoices(Enum):
+class GoogleTTSVoices(Enum):
 	def __str__(self) -> str:
 		return self.name
 
@@ -437,3 +437,4 @@ class AutoResponseType(Enum):
 	text = 0
 	file = 1
 	script = 2
+	deleted = 3

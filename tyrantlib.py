@@ -1,7 +1,8 @@
 from concurrent.futures import ThreadPoolExecutor
+from .version_checker import get_semantic_version
 from collections.abc import Mapping
 from asyncio import get_event_loop
-from .models import LastUpdate
+from .models import Version
 from secrets import token_hex
 from zlib import decompress
 from aiofiles import open
@@ -46,10 +47,10 @@ def convert_time(seconds:int|float,decimal=15) -> str:
 	days,hours,minutes,res = int(days),int(hours),int(minutes),[]
 	if decimal == 0: seconds = int(seconds)
 	else: seconds = round(seconds,decimal)
-	if days: res.append(f'{days} day{"" if days == 1 else "s"}')
-	if hours: res.append(f'{hours} hour{"" if hours == 1 else "s"}')
-	if minutes: res.append(f'{minutes} minute{"" if minutes == 1 else "s"}')
-	if seconds: res.append(f'{seconds} second{"" if seconds == 1 else "s"}')
+	if days: res.append(f'{days} day{"s"*(days != 1)}')
+	if hours: res.append(f'{hours} hour{"s"*(hours != 1)}')
+	if minutes: res.append(f'{minutes} minute{"s"*(minutes != 1)}')
+	if seconds: res.append(f'{seconds} second{"s"*(seconds != 1)}')
 	return ', '.join(res)
 
 def get_line_count(input_path:str,excluded_dirs:list=None,excluded_files:list=None) -> int:
@@ -90,7 +91,11 @@ def decode_b66(b66:str) -> int:
 def generate_token(user_id:int) -> str:
 	return f'{encode_b66(user_id)}.{encode_b66(int((time()*1000)-token_epoch))}.{encode_b66(int(token_hex(20),16))}'
 
-async def get_last_update(git_branch:str) -> LastUpdate:
+async def get_version(
+	git_branch:str,
+	start_commit:str=None,
+	start_version:list[int]=[0,0,0]
+) -> Version:
 	async with open(f'.git/refs/heads/{git_branch}','r') as f:
 		git_hash = (await f.read()).strip()
 
@@ -99,7 +104,13 @@ async def get_last_update(git_branch:str) -> LastUpdate:
 			git_data = await f.read()
 			git_object = (await get_event_loop().run_in_executor(executor,lambda: decompress(git_data))).decode()
 			ts = int(git_object.split('\n')[2].split(' ')[3])
-	return LastUpdate(commit=git_hash[:7],commit_full=git_hash,timestamp=ts)
+	return Version(
+		semantic=await get_semantic_version(
+			start_commit=start_commit,
+			start_version=start_version),
+		commit=git_hash[:7],
+		commit_full=git_hash,
+		timestamp=ts)
 
 class ArbitraryClass:
 	def __init__(self,**kwargs) -> None:

@@ -1,5 +1,5 @@
 from .ext.enums import AutoResponseMethod,AutoResponseType
-from pydantic import BaseModel,Field
+from pydantic import BaseModel,Field,conlist
 from datetime import timedelta
 from beanie import Document
 from typing import Optional
@@ -16,7 +16,7 @@ class AutoResponse(Document):
 	class AutoResponseData(BaseModel):
 		class AutoResponseFollowup(BaseModel):
 			delay:float = Field(0,ge=0,description='auto response followup delay in seconds')
-			response:str = Field(description='auto response followup response')
+			response:str = Field(max_length=1024,description='auto response followup response')
 
 		weight:Optional[int] = Field(None,description='auto response weight (for when multiple auto responses are triggered)')
 		chance:Optional[int] = Field(None,description='chance to respond (assuming auto response is selected) None for 100%')
@@ -29,11 +29,11 @@ class AutoResponse(Document):
 		user:Optional[int] = Field(None,description='auto response users')
 		guild:Optional[int] = Field(None,description='auto response guild')
 		source:Optional[str] = Field(None,description='auto response source')
-		followups:list[AutoResponseFollowup] = Field([],description='auto response followups')
+		followups:conlist(AutoResponseFollowup,max_length=10) = Field([],description='auto response followups')
 
 	id:str = Field(description='auto response id')
 	method:AutoResponseMethod = Field(description='auto response method')
 	trigger:str = Field(description='auto response trigger')
-	response:str = Field(description='auto response response')
+	response:str = Field(max_length=1024,description='auto response response')
 	type:AutoResponseType = Field(description='auto response type')
 	data:AutoResponseData = Field(description='auto response data')
