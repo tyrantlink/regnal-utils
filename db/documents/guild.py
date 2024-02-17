@@ -7,6 +7,11 @@ from beanie import Document
 from pytz import timezone
 
 
+class GuildDataQOTDQuestion(BaseModel):
+	question:str = Field(min_length=1,max_length=256,description='question to be asked')
+	author:str = Field(min_length=1,max_length=32,description='author of the question')
+	icon:str = Field(min_length=1,max_length=200,description='icon of the author')
+
 class Guild(Document):
 	class Settings:
 		name = 'guilds'
@@ -45,7 +50,7 @@ class Guild(Document):
 		class GuildConfigQOTD(BaseModel):
 			enabled:bool = Field(False,description='enable/disable qotd\n\nif disabled, all qotd will be disabled')
 			channel:Optional[int] = Field(None)
-			time:str = Field('00:00',min_length=5,max_length=5,pattern=r'^\d{2}:\d{2}$',description='time of day to send qotd\n\nformat: HH:MM (24 hour)')
+			time:str = Field('00:00',min_length=5,max_length=5,pattern=r'^\d{2}:\d{2}$',description='time of day to send qotd\n\nformat: HH:MM (24 hour)\nfollows guild set timezone')
 
 		class GuildConfigTTS(BaseModel):
 			enabled:bool = Field(True,description='allow tts to be used')
@@ -74,16 +79,11 @@ class Guild(Document):
 
 	class GuildData(BaseModel):
 		class GuildDataQOTD(BaseModel):
-			class GuildDataQOTDQuestion(BaseModel):
-				question:str = Field(min_length=1,max_length=200,description='question to be asked')
-				author:str = Field(min_length=1,max_length=32,description='author of the question')
-				icon:str = Field(min_length=1,max_length=200,description='icon of the author')
-
-			last_question:int = Field(0,ge=0,description='timestamp of last question sent')
-			nextup:list[GuildDataQOTDQuestion] = Field([],description='questions that will be sent next')
-			pool:list[GuildDataQOTDQuestion] = Field([],description='questions added to custom pool')
-			asked:str = Field('',description='question asked stored as a bitstring')
-			asked_custom:str = Field('',description='custom question asked stored as a bitstring')
+			last:int = Field(0,ge=0,description='day of last question sent')
+			last_thread:Optional[int] = Field(None,description='thread id of last question sent')
+			nextup:list[GuildDataQOTDQuestion] = Field([],description='questions that will be sent next (custom)')
+			asked:dict[str,str] = Field('',description='question asked stored as {pack:bitstring}')
+			packs:list[str] = Field(['base'],description='question packs')
 
 		class GuildDataTalkingStick(BaseModel):
 			current:Optional[int] = Field(None,description='user currently holding the talking stick')

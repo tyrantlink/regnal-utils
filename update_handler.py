@@ -43,7 +43,7 @@ class UpdateHandler:
 
 		self.log.info(f'received post request from {request.remote} with valid signature')
 		self._updating = True
-		# await (await create_subprocess_shell('git reset --hard && git pull')).wait()
+		# await (await create_subprocess_shell('git reset --hard && git pull --recurse-submodules')).wait()
 		self._updating = False
 		return Response()
 

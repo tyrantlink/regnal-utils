@@ -86,3 +86,6 @@ class CustomModal(_DModal):
 	async def callback(self, interaction: Interaction):
 		self.interaction = interaction
 		self.stop()
+
+class SubCog:
+	client:'Client'
