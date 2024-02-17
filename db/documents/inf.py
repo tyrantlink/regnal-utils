@@ -17,9 +17,6 @@ class INFTextCorrection(INFBase):
 class INFCommandUsage(INFBase):
 	value:dict[str,int] = Field(description='dictionary of command usage')
 
-class INFQOTD(INFBase):
-	value:list[str] = Field(description='list of qotd questions')
-
 class INFExcuses(INFBase):
 	class INFExcuseObject(BaseModel):
 		intro:list[str] = Field(description='list of excuse intros')
@@ -59,11 +56,6 @@ class Inf:
 	async def command_usage() -> INFCommandUsage:
 		"""inf command usage"""
 		return await INFCommandUsage.find_one({'_id': 'command_usage'})
-
-	@staticmethod
-	async def qotd() -> INFQOTD:
-		"""inf qotd"""
-		return await INFQOTD.find_one({'_id': 'qotd'})
 
 	@staticmethod
 	async def excuses() -> INFExcuses:
