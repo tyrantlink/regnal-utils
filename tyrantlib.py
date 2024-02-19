@@ -2,8 +2,9 @@ from concurrent.futures import ThreadPoolExecutor
 from .version_checker import get_semantic_version
 from collections.abc import Mapping
 from asyncio import get_event_loop
-from .models import Version
 from secrets import token_hex
+from typing import Generator
+from .models import Version
 from zlib import decompress
 from aiofiles import open
 from os.path import isdir
@@ -71,7 +72,7 @@ def get_line_count(input_path:str,excluded_dirs:list=None,excluded_files:list=No
 		file = sub(r'\s*$','',file, flags=8)
 		return sum(1 for l in file.splitlines() if l.strip())
 
-def split_list(lst:list,size:int) -> list:
+def split_list(lst:list,size:int) -> Generator[list,None,None]:
 	for i in range(0,len(lst),size):
 		yield lst[i:i+size]
 

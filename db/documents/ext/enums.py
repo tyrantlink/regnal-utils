@@ -427,8 +427,9 @@ class AutoResponseMethod(Enum):
 
 	exact = 0
 	contains = 1
-	regex = 2 # different from data.regex, this method uses raw matching rather than adding filtering
+	regex = 2 # different from data.regex, this method uses raw matching rather than adding word delimitation
 	mention = 3
+	disabled = 4
 
 class AutoResponseType(Enum):
 	def __str__(self) -> str:

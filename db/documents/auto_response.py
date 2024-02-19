@@ -2,8 +2,10 @@ from .ext.enums import AutoResponseMethod,AutoResponseType
 from pydantic import BaseModel,Field,conlist
 from datetime import timedelta
 from beanie import Document
-from typing import Optional
+from typing import Optional,TypeVar
+from utils.tyrantlib import merge_dicts
 
+A = TypeVar("A", bound="AutoResponse")
 
 class AutoResponse(Document):
 	class Settings:
@@ -18,18 +20,17 @@ class AutoResponse(Document):
 			delay:float = Field(0,ge=0,description='auto response followup delay in seconds')
 			response:str = Field(max_length=1024,description='auto response followup response')
 
-		weight:Optional[int] = Field(None,description='auto response weight (for when multiple auto responses are triggered)')
-		chance:Optional[int] = Field(None,description='chance to respond (assuming auto response is selected) None for 100%')
+		weight:int = Field(1000,description='auto response weight (for when multiple auto responses are triggered)')
 		ignore_cooldown:bool = Field(False,description='auto response ignores cooldown\n\nwarning, people can use this to spam')
 		custom:bool = Field(False,description='auto response is guild custom')
 		regex:bool = Field(False,description='auto response trigger is regex')
 		nsfw:bool = Field(False,description='auto response is nsfw')
 		case_sensitive:bool = Field(False,description='auto response trigger is case sensitive')
 		delete_trigger:bool = Field(False,description='auto response trigger is deleted')
-		user:Optional[int] = Field(None,description='auto response users')
+		user:Optional[int] = Field(None,description='auto response user')
 		guild:Optional[int] = Field(None,description='auto response guild')
 		source:Optional[str] = Field(None,description='auto response source')
-		followups:conlist(AutoResponseFollowup,max_length=10) = Field([],description='auto response followups')
+		followups:conlist(AutoResponseFollowup,max_length=10) = Field([],description='auto response followups') # type: ignore # it's fine, it's pydantic black magic
 
 	id:str = Field(description='auto response id')
 	method:AutoResponseMethod = Field(description='auto response method')
@@ -37,3 +38,6 @@ class AutoResponse(Document):
 	response:str = Field(max_length=1024,description='auto response response')
 	type:AutoResponseType = Field(description='auto response type')
 	data:AutoResponseData = Field(description='auto response data')
+
+	def with_overrides(self,overrides:dict) -> A:
+		return self.model_validate(merge_dicts(self.dict(),overrides))
