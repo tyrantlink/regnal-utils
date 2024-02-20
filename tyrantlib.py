@@ -15,7 +15,7 @@ from re import sub
 
 sizes = ['bytes','KBs','MBs','GBs','TBs','PBs','EBs','ZBs','YBs']
 token_epoch = 1620198608689
-base66chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-_~'
+base66chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=-_~'
 
 def merge_dicts(*dicts:dict) -> dict:
 	"""priority goes to the last dict"""
