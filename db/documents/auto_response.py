@@ -3,7 +3,7 @@ from pydantic import BaseModel,Field,conlist
 from datetime import timedelta
 from beanie import Document
 from typing import Optional,TypeVar
-from utils.tyrantlib import merge_dicts
+from ...tyrantlib import merge_dicts
 
 A = TypeVar("A", bound="AutoResponse")
 
