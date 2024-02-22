@@ -8,14 +8,14 @@ class BaseGatewayMessage(BaseModel):
 	error:Optional[str] = Field(None,description='error message if the message is an error')
 
 class Ack(BaseGatewayMessage): #? ack is response without a body
-	op = GatewayOpCode.ACK
+	op:GatewayOpCode = GatewayOpCode.ACK
 
 class Heartbeat(BaseGatewayMessage):
-	op = GatewayOpCode.HEARTBEAT
+	op:GatewayOpCode = GatewayOpCode.HEARTBEAT
 
 class Request(BaseGatewayMessage):
-	op = GatewayOpCode.REQUEST
+	op:GatewayOpCode = GatewayOpCode.REQUEST
 	req:GatewayRequestType = Field(description='request type')
 
 class Response(BaseGatewayMessage):
-	op = GatewayOpCode.RESPONSE
+	op:GatewayOpCode = GatewayOpCode.RESPONSE
