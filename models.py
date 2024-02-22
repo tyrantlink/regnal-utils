@@ -10,6 +10,7 @@ class BotData(BaseModel):
 	type:BotType # bot type
 	logstream:str # parseable logstream
 	token:str # bot token
+	api_token:str # bot api token
 	guilds:list[int] # guilds the bot is limited to (unrestricted if empty)
 	disabled_extensions:list[str] # disabled extensions by name
 	custom_extension:bool
@@ -19,6 +20,8 @@ class _ProjectConfig(BaseModel):
 	base_guilds:list[int] # additional guilds small bots should join (emote servers, etc)
 	git_branch:str # branch to pull from
 	github_secret:str # github webhook secret
+	pluralkit_token:str # pluralkit token
+	contact_email:str # email used in pk user agent
 	base_version:list[int] # base version to start with when counting commits
 	start_commit:str # commit to start counting from
 
@@ -37,7 +40,6 @@ class _ProjectMongo(BaseModel):
 
 class _ProjectAPI(BaseModel):
 	url:str # api url (crapi)
-	token:str # api token
 
 class _ProjectParseable(BaseModel):
 	base_url:str # base url for parseable

@@ -43,6 +43,7 @@ class Guild(Document):
 			member_leave:bool = Field(False,description='enable/disable logging of member leaves')
 			member_ban:bool = Field(False,description='enable/disable logging of member bans')
 			member_unban:bool = Field(False,description='enable/disable logging of member unbans')
+			pluralkit_support:bool = Field(False,description='suppress messages deleted by pluralkit')
 
 		class GuildConfigPermissions(BaseModel):
 			advanced:bool = Field(False,description='enable/disable the advanced permission system')
@@ -68,21 +69,21 @@ class Guild(Document):
 		class GuildConfigSauceNao(BaseModel):
 			api_key:Optional[str] = Field(None,description='sauce nao api key\n\nif not set, the default api key will be used (with a very low limit)]\n\nget an api key at https://saucenao.com/user.php?page=account-upgrades')
 
-		general:GuildConfigGeneral = Field(description='general options')
-		auto_responses:GuildConfigAutoResponses = Field(description='auto response options')
-		logging:GuildConfigLogging = Field(description='logging options')
-		permissions:GuildConfigPermissions = Field(description='advanced permission options')
-		qotd:GuildConfigQOTD = Field(description='qotd options')
-		tts:GuildConfigTTS = Field(description='text-to-speech options')
-		talking_stick:GuildConfigTalkingStick = Field(description='talking stick options')
-		saucenao:GuildConfigSauceNao = Field(description='sauce nao options')
+		general:GuildConfigGeneral = Field(GuildConfigGeneral(),description='general options')
+		auto_responses:GuildConfigAutoResponses = Field(GuildConfigAutoResponses(),description='auto response options')
+		logging:GuildConfigLogging = Field(GuildConfigLogging(),description='logging options')
+		permissions:GuildConfigPermissions = Field(GuildConfigPermissions(),description='advanced permission options')
+		qotd:GuildConfigQOTD = Field(GuildConfigQOTD(),description='qotd options')
+		tts:GuildConfigTTS = Field(GuildConfigTTS(),description='text-to-speech options')
+		talking_stick:GuildConfigTalkingStick = Field(GuildConfigTalkingStick(),description='talking stick options')
+		saucenao:GuildConfigSauceNao = Field(GuildConfigSauceNao(),description='sauce nao options')
 
 	class GuildData(BaseModel):
 		class GuildDataQOTD(BaseModel):
 			last:int = Field(0,ge=0,description='day of last question sent')
 			last_thread:Optional[int] = Field(None,description='thread id of last question sent')
 			nextup:list[GuildDataQOTDQuestion] = Field([],description='questions that will be sent next (custom)')
-			asked:dict[str,str] = Field('',description='question asked stored as {pack:bitstring}')
+			asked:dict[str,str] = Field({},description='question asked stored as {pack:bitstring}')
 			packs:list[str] = Field(['base'],description='question packs')
 
 		class GuildDataTalkingStick(BaseModel):
@@ -108,21 +109,21 @@ class Guild(Document):
 			tts:int = Field(0,ge=0,description='total tts characters used')
 
 		activity:dict[str,dict[str,int]] = Field({},max_length=30,description='activity data for at most last 30 days\n\nformat {day:{user_id:count}}')
-		auto_responses:GuildDataAutoResponses = Field(description='auto response data')
+		auto_responses:GuildDataAutoResponses = Field(GuildDataAutoResponses(),description='auto response data')
 		permissions:dict[str,list[str]] = Field({'@everyone':[]},description='permissions for user/roles\n\nformat {id:[permission1,...]}')
-		qotd:GuildDataQOTD = Field(description='qotd data')
-		tts:GuildDataTTS = Field(description='text-to-speech data')
-		talking_stick:GuildDataTalkingStick = Field(description='talking stick data')
-		hide_commands:GuildDataHideCommands = Field(description='hide commands data')
-		statistics:GuildDataStatistics = Field(description='guild statistics')
+		qotd:GuildDataQOTD = Field(GuildDataQOTD(),description='qotd data')
+		tts:GuildDataTTS = Field(GuildDataTTS(),description='text-to-speech data')
+		talking_stick:GuildDataTalkingStick = Field(GuildDataTalkingStick(),description='talking stick data')
+		hide_commands:GuildDataHideCommands = Field(GuildDataHideCommands(),description='hide commands data')
+		statistics:GuildDataStatistics = Field(GuildDataStatistics(),description='guild statistics')
 		flags:int = Field(0,description='flags the guild has')
 		extra:dict[str,Any] = Field({},description='extra data')
 
 	id:int = Field(description='guild\'s discord id')
 	name:str = Field(description='guild\'s discord name')
 	owner:int|None = Field(description='guild\'s discord owner id')
-	config:GuildConfig = Field(description='guild config')
-	data:GuildData = Field(description='guild data')
+	config:GuildConfig = Field(GuildConfig(),description='guild config')
+	data:GuildData = Field(GuildData(),description='guild data')
 
 	def get_current_day(self) -> int:
 		_guild_timezone = timezone(self.config.general.timezone)

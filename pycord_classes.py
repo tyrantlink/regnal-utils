@@ -23,7 +23,7 @@ class View(_DView):
 	async def on_error(self,error:Exception,item:Item,interaction:Interaction) -> None:
 		embed = Embed(title='an error has occurred!',color=0xff6969)
 		embed.add_field(name='error',value=str(error))
-		await interaction.followup.send(embed=embed,ephemeral=True)
+		await interaction.respond(embed=embed,ephemeral=True)
 
 class BackButton(Button):
 	def __init__(self,views:list['SubView']) -> None:
@@ -51,7 +51,7 @@ class SubView(View):
 	async def interaction_check(self,interaction:Interaction) -> bool:
 		return (
 			interaction.user.id == self.user.id or
-			interaction.user.id in self.master.client.owner_ids and self.client.project.config.dev_bypass)
+			interaction.user.id in self.client.owner_ids and self.client.project.config.dev_bypass)
 
 	async def __ainit__(self) -> None:
 		"""async init, should always be called after initialization"""
