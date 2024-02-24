@@ -19,3 +19,4 @@ class Request(BaseGatewayMessage):
 
 class Response(BaseGatewayMessage):
 	op:GatewayOpCode = GatewayOpCode.RESPONSE
+	data:dict = Field(description='response data')
