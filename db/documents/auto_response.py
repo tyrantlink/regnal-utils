@@ -38,4 +38,4 @@ class AutoResponse(Document):
 	data:AutoResponseData = Field(description='auto response data')
 
 	def with_overrides(self,overrides:dict) -> Self:
-		return self.model_validate(merge_dicts(self.model_dump_json(),overrides))
+		return self.model_validate(merge_dicts(self.model_dump(),overrides))
