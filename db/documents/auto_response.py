@@ -1,11 +1,9 @@
 from .ext.enums import AutoResponseMethod,AutoResponseType
 from pydantic import BaseModel,Field,conlist
+from ...tyrantlib import merge_dicts
+from typing import Optional,Self
 from datetime import timedelta
 from beanie import Document
-from typing import Optional,TypeVar
-from ...tyrantlib import merge_dicts
-
-A = TypeVar("A", bound="AutoResponse")
 
 class AutoResponse(Document):
 	class Settings:
@@ -39,5 +37,5 @@ class AutoResponse(Document):
 	type:AutoResponseType = Field(description='auto response type')
 	data:AutoResponseData = Field(description='auto response data')
 
-	def with_overrides(self,overrides:dict) -> A:
-		return self.model_validate(merge_dicts(self.dict(),overrides))
+	def with_overrides(self,overrides:dict) -> Self:
+		return self.model_validate(merge_dicts(self.model_dump_json(),overrides))
