@@ -11,3 +11,4 @@ class GatewayOpCode(Enum): # comments from client perspective
 class GatewayRequestType(Enum):
 	UNDEFINED = 0
 	RELOAD_AU = 1
+	SEND_MESSAGE = 2

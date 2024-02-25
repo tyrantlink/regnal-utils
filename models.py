@@ -22,6 +22,8 @@ class _ProjectConfig(BaseModel):
 	github_secret:str # github webhook secret
 	pluralkit_token:str # pluralkit token
 	contact_email:str # email used in pk user agent
+	dm_proxy_channel:int # channel to proxy dms to, must be forum channel
+	primary_bot_id:int # primary bot id, should be the only bot with access to dm proxy channel
 	base_version:list[int] # base version to start with when counting commits
 	start_commit:str # commit to start counting from
 
@@ -31,6 +33,7 @@ class _ProjectWebhooks(BaseModel):
 	support_suggestion_tag:int # tag for suggestions
 	updates:str # announcement channel for updates
 	errors:str # text channel for error logging
+	dm_proxy:str # webhook to send dms to
 
 class _ProjectEnv(BaseModel):
 	saucenao_key:str # saucenao api key

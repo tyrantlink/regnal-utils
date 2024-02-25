@@ -52,6 +52,7 @@ class User(Document):
 		api:UserDataAPI = Field(description='api data')
 		auto_responses:UserDataAutoResponses = Field(description='auto response data')
 		statistics:UserDataStatistics = Field(description='user statistics')
+		dm_threads:dict[str,int] = Field({},description='dictionary of dm threads {bot_id:thread_id}')
 		flags:int = Field(0,description='flags the user has')
 		extra:dict[str,Any] = Field({},description='extra data')
 
