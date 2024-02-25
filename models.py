@@ -16,6 +16,7 @@ class BotData(BaseModel):
 	custom_extension:bool
 
 class _ProjectConfig(BaseModel):
+	log_level:int # log level # 0-5
 	dev_bypass:bool # allows users on dev team to access all commands
 	base_guilds:list[int] # additional guilds small bots should join (emote servers, etc)
 	git_branch:str # branch to pull from

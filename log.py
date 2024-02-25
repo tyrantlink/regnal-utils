@@ -2,12 +2,21 @@ from aiohttp import ClientSession
 from asyncio import create_task
 from datetime import datetime
 from json import dumps
+from enum import Enum
 
+class LogLevel(Enum):
+	NONE = 0
+	CRITICAL = 1
+	ERROR = 2
+	WARNING = 3
+	INFO = 4
+	DEBUG = 5
 
 class Logger:
-	def __init__(self,url:str,logsteam:str,token:str) -> None:
+	def __init__(self,url:str,logstream:str,token:str,log_level:LogLevel) -> None:
 		self.base_url = url
-		self.logstream = logsteam
+		self.logstream = logstream
+		self.log_level = log_level
 		self.url = f'{self.base_url}/{self.logstream}'
 		self.headers = {
 			"Authorization": f"Basic {token}",
@@ -23,8 +32,9 @@ class Logger:
 		# 				raise Exception(f'Logger failed with status {resp.status}\n{await resp.text()}')
 
 
-	def _log(self,message:str,label:str,guild_id:int|None=None,metadata:dict|None=None) -> None:
-		print(f'[{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}] [{self.logstream.upper()}] [{label}] {message}')
+	def _log(self,message:str,label:LogLevel,guild_id:int|None=None,metadata:dict|None=None) -> None:
+		if label.value > self.log_level.value: return
+		print(f'[{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}] [{self.logstream.upper()}] [{label.name}] {message}')
 		# create_task(self._log_to_parseable(message,label,guild_id,metadata))
 
 	async def _log_to_parseable(self,message:str,label:str,guild_id:int|None=None,metadata:dict|None=None) -> None:
@@ -42,13 +52,9 @@ class Logger:
 			except Exception:
 				print('failed to log message to parseable')
 
-	def custom(self,label:str,message:str,guild_id:int|None=None,**metadata) -> None: self._log(message,label.upper(),guild_id,metadata)
-	def info(self,message:str,guild_id:int|None=None,**metadata)             -> None: self.custom('info',message,guild_id,**metadata)
-	def error(self,message:str,guild_id:int|None=None,**metadata)            -> None: self.custom('error',message,guild_id,**metadata)
-	def warning(self,message:str,guild_id:int|None=None,**metadata)          -> None: self.custom('warning',message,guild_id,**metadata)
-	def debug(self,message:str,guild_id:int|None=None,**metadata)            -> None: self.custom('debug',message,guild_id,**metadata)
-	def critical(self,message:str,guild_id:int|None=None,**metadata)         -> None: self.custom('critical',message,guild_id,**metadata)
-
-	def success(self,message:str,guild_id:int|None=None,**metadata)          -> None: self.custom('success',message,guild_id,**metadata)
-	def client_error(self,message:str,guild_id:int|None=None,**metadata)     -> None: self.custom('client_error',message,guild_id,**metadata)
-	def server_error(self,message:str,guild_id:int|None=None,**metadata)     -> None: self.custom('server_error',message,guild_id,**metadata)
+	def custom(self,label:LogLevel,message:str,guild_id:int|None=None,**metadata) -> None: self._log(message,label,guild_id,metadata)
+	def info(self,message:str,guild_id:int|None=None,**metadata)             -> None: self.custom(LogLevel.INFO,message,guild_id,**metadata)
+	def error(self,message:str,guild_id:int|None=None,**metadata)            -> None: self.custom(LogLevel.ERROR,message,guild_id,**metadata)
+	def warning(self,message:str,guild_id:int|None=None,**metadata)          -> None: self.custom(LogLevel.WARNING,message,guild_id,**metadata)
+	def debug(self,message:str,guild_id:int|None=None,**metadata)            -> None: self.custom(LogLevel.DEBUG,message,guild_id,**metadata)
+	def critical(self,message:str,guild_id:int|None=None,**metadata)         -> None: self.custom(LogLevel.CRITICAL,message,guild_id,**metadata)
