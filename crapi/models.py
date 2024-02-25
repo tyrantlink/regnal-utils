@@ -16,7 +16,7 @@ class Heartbeat(BaseGatewayMessage):
 class Request(BaseGatewayMessage):
 	op:GatewayOpCode = GatewayOpCode.REQUEST
 	req:GatewayRequestType = Field(description='request type')
-	forward:Optional[str] = Field(description='connected bot id to forward the request to') # only used by client
+	forward:Optional[str] = Field(None,description='connected bot id to forward the request to') # only used by client
 	data:dict = Field({},description='request data')
 
 class Response(BaseGatewayMessage):
