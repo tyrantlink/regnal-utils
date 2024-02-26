@@ -13,9 +13,16 @@ class LogLevel(Enum):
 	DEBUG = 5
 
 class Logger:
-	def __init__(self,url:str,logstream:str,token:str,log_level:LogLevel) -> None:
+	def __init__(self,
+		url:str,
+		logstream:str,
+		logstream_padding:int,
+		token:str,
+		log_level:LogLevel
+	) -> None:
 		self.base_url = url
 		self.logstream = logstream
+		self.logstream_padding = logstream_padding
 		self.log_level = log_level
 		self.url = f'{self.base_url}/{self.logstream}'
 		self.headers = {
@@ -34,7 +41,9 @@ class Logger:
 
 	def _log(self,message:str,label:LogLevel,guild_id:int|None=None,metadata:dict|None=None) -> None:
 		if label.value > self.log_level.value: return
-		print(f'[{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}] [{self.logstream.upper()}] [{label.name}] {message}')
+		logstream = f'[{self.logstream.upper()}]'.ljust(self.logstream_padding+2)
+		padded_label = f'[{label.name}]'.ljust(max([len(l.name) for l in LogLevel])+2)
+		print(f'[{datetime.now().strftime("%Y/%m/%d %H:%M:%S")}] {logstream} {padded_label} {message}')
 		# create_task(self._log_to_parseable(message,label,guild_id,metadata))
 
 	async def _log_to_parseable(self,message:str,label:str,guild_id:int|None=None,metadata:dict|None=None) -> None:

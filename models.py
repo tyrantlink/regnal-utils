@@ -49,6 +49,7 @@ class _ProjectParseable(BaseModel):
 	base_url:str # base url for parseable
 	token:str # parseable token
 	logstream:str # hypervisor logstream
+	logstream_padding:int # padding to keep all loggers the same length; -1 = auto
 
 class Project(BaseModel):
 	config:_ProjectConfig
