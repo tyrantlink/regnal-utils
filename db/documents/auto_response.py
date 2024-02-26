@@ -35,7 +35,7 @@ class AutoResponse(Document):
 	trigger:str = Field(description='auto response trigger')
 	response:str = Field(max_length=1024,description='auto response response')
 	type:AutoResponseType = Field(description='auto response type')
-	data:AutoResponseData = Field(description='auto response data')
+	data:AutoResponseData = Field(AutoResponseData(),description='auto response data')
 
 	def with_overrides(self,overrides:dict) -> Self:
 		return self.model_validate(merge_dicts(self.model_dump(),overrides))

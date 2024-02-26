@@ -24,7 +24,7 @@ class User(Document):
 
 		class UserConfigTTS(BaseModel):
 			mode:TTSMode = Field(TTSMode.only_when_muted,description='when to use tts')
-			name:Optional[str] = Field(...,min_length=1,max_length=32,description='name used by tts\n\nif not set, your current display name will be used')
+			name:Optional[str] = Field(None,min_length=1,max_length=32,description='name used by tts\n\nif not set, your current display name will be used')
 			auto_join:bool = Field(False,description='automatically join voice channel\n\nif disabled, you will have to invite tts manually with {cmd_ref[tts join]}')
 			voice:Optional[GoogleTTSVoices] = Field(None,description='voice used by tts\n\nif not set, guild.tts.default_voice will be used')
 			speaking_rate:float = Field(0.8,ge=0.25,le=4,description='speaking rate used by tts')
@@ -33,8 +33,8 @@ class User(Document):
 		class UserConfigAutoResponses(BaseModel):
 			disabled:list[str] = Field([],description='auto responses disabled')
 
-		general:UserConfigGeneral = Field(description='general options')
-		tts:UserConfigTTS = Field(description='text-to-speech options')
+		general:UserConfigGeneral = Field(UserConfigGeneral(),description='general options')
+		tts:UserConfigTTS = Field(UserConfigTTS(),description='text-to-speech options')
 
 	class UserData(BaseModel):
 		class UserDataAPI(BaseModel):
@@ -49,14 +49,14 @@ class User(Document):
 			api_usage:int = Field(0,description='api calls made')
 			tts_usage:int = Field(0,description='tts characters used')
 
-		api:UserDataAPI = Field(description='api data')
-		auto_responses:UserDataAutoResponses = Field(description='auto response data')
-		statistics:UserDataStatistics = Field(description='user statistics')
+		api:UserDataAPI = Field(UserDataAPI(),description='api data')
+		auto_responses:UserDataAutoResponses = Field(UserDataAutoResponses(),description='auto response data')
+		statistics:UserDataStatistics = Field(UserDataStatistics(),description='user statistics')
 		dm_threads:dict[str,int] = Field({},description='dictionary of dm threads {bot_id:thread_id}')
 		flags:int = Field(0,description='flags the user has')
 		extra:dict[str,Any] = Field({},description='extra data')
 
 	id:int = Field(description='user\'s discord id')
 	username:str = Field(description='user\'s discord username')
-	config:UserConfig = Field(description='user config')
-	data:UserData = Field(description='user data')
+	config:UserConfig = Field(UserConfig(),description='user config')
+	data:UserData = Field(UserData(),description='user data')
