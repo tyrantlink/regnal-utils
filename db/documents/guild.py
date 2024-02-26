@@ -94,6 +94,7 @@ class Guild(Document):
 			whitelist:list[int] = Field([],description='channels where auto responses are whitelisted')
 			blacklist:list[int] = Field([],description='channels where auto responses are blacklisted')
 			overrides:dict[str,dict] = Field({},description='auto response overrides')
+			imported_scripts:list[str] = Field([],description='scripted auto responses that have been imported')
 
 		class GuildDataHideCommands(BaseModel):
 			whitelist:list[int] = Field([],description='channels where commands are whitelisted')
