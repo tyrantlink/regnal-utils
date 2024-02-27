@@ -12,3 +12,4 @@ class GatewayRequestType(Enum):
 	UNDEFINED = 0
 	RELOAD_AU = 1
 	SEND_MESSAGE = 2
+	BOT_INFO = 3
