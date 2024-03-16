@@ -1,11 +1,17 @@
-from .ext.enums import GoogleTTSVoices,TTSMode
 from pydantic import BaseModel,Field
 from typing import Optional,Any
 from datetime import timedelta
+from .ext.enums import TTSMode
 from beanie import Document
 
 
 class User(Document):
+	def __eq__(self, other: object) -> bool:
+		return isinstance(other, type(self)) and self.id == other.id
+	
+	def __hash__(self) -> int:
+		return hash(self.id)
+
 	class Settings:
 		name = 'users'
 		use_cache = True
@@ -26,7 +32,7 @@ class User(Document):
 			mode:TTSMode = Field(TTSMode.only_when_muted,description='when to use tts')
 			name:Optional[str] = Field(None,min_length=1,max_length=32,description='name used by tts\n\nif not set, your current display name will be used')
 			auto_join:bool = Field(False,description='automatically join voice channel\n\nif disabled, you will have to invite tts manually with {cmd_ref[tts join]}')
-			voice:Optional[GoogleTTSVoices] = Field(None,description='voice used by tts\n\nif not set, guild.tts.default_voice will be used')
+			voice:Optional[str] = Field(None,description='voice used by tts\n\nif not set, guild.tts.default_voice will be used')
 			speaking_rate:float = Field(0.8,ge=0.25,le=4,description='speaking rate used by tts')
 			text_correction:bool = Field(True,description='silently corrects text so it\'s more accurately pronounced')
 
@@ -43,6 +49,7 @@ class User(Document):
 
 		class UserDataAutoResponses(BaseModel):
 			found:list[str] = Field([],description='auto responses found')
+			disabled:list[str] = Field([],description='auto responses disabled')
 
 		class UserDataStatistics(BaseModel):
 			messages:dict[str,int] = Field({},description='message counts by guild id\n\nlegacy data under _legacy')

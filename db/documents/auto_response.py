@@ -6,6 +6,12 @@ from datetime import timedelta
 from beanie import Document
 
 class AutoResponse(Document):
+	def __eq__(self, other: object) -> bool:
+		return isinstance(other, type(self)) and self.id == other.id
+	
+	def __hash__(self) -> int:
+		return hash(self.id)
+
 	class Settings:
 		name = 'auto_responses'
 		use_cache = True
@@ -19,6 +25,7 @@ class AutoResponse(Document):
 			response:str = Field(max_length=1024,description='auto response followup response')
 
 		weight:int = Field(1000,description='auto response weight (for when multiple auto responses are triggered)')
+		chance:float = Field(100.0,gt=0,le=100,description='auto response chance\n\nchance to trigger when selected, if failed, auto response is rerolled')
 		ignore_cooldown:bool = Field(False,description='auto response ignores cooldown\n\nwarning, people can use this to spam')
 		custom:bool = Field(False,description='auto response is guild custom')
 		regex:bool = Field(False,description='auto response trigger is regex')
@@ -30,12 +37,16 @@ class AutoResponse(Document):
 		source:Optional[str] = Field(None,description='auto response source')
 		followups:conlist(AutoResponseFollowup,max_length=10) = Field([],description='auto response followups') # type: ignore # it's fine, it's pydantic black magic
 
+	class AutoResponseStatistics(BaseModel):
+		trigger_count:int = Field(0,ge=0,description='auto response trigger count')
+
 	id:str = Field(description='auto response id')
 	method:AutoResponseMethod = Field(description='auto response method')
 	trigger:str = Field(description='auto response trigger')
 	response:str = Field(max_length=1024,description='auto response response')
 	type:AutoResponseType = Field(description='auto response type')
 	data:AutoResponseData = Field(AutoResponseData(),description='auto response data')
+	statistics:AutoResponseStatistics = Field(AutoResponseStatistics(),description='auto response statistics')
 
 	def with_overrides(self,overrides:dict) -> Self:
 		return self.model_validate(merge_dicts(self.model_dump(),overrides))

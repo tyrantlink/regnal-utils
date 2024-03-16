@@ -1,4 +1,4 @@
-from .ext.enums import TWBFMode,AUCooldownMode,GoogleTTSVoices
+from .ext.enums import TWBFMode,AUCooldownMode
 from pydantic import BaseModel,Field
 from typing import Optional,Any
 from datetime import timedelta
@@ -13,6 +13,12 @@ class GuildDataQOTDQuestion(BaseModel):
 	icon:str = Field(min_length=1,max_length=200,description='icon of the author')
 
 class Guild(Document):
+	def __eq__(self, other: object) -> bool:
+		return isinstance(other, type(self)) and self.id == other.id
+	
+	def __hash__(self) -> int:
+		return hash(self.id)
+
 	class Settings:
 		name = 'guilds'
 		use_cache = True
@@ -56,7 +62,7 @@ class Guild(Document):
 		class GuildConfigTTS(BaseModel):
 			enabled:bool = Field(True,description='allow tts to be used')
 			channels:list[int] = Field([],description='channels where tts is allowed\n\nvoice-text channels will always allow tts')
-			default_voice:Optional[GoogleTTSVoices] = Field(None,description='default voice used by tts\n\nif not set, the default voice (en-US-Neural2-H) will be used')
+			default_voice:Optional[str] = Field(None,description='default voice used by tts\n\nif not set, the default voice (en-US-Neural2-H) will be used')
 
 		class GuildConfigTalkingStick(BaseModel):
 			enabled:bool = Field(False,description='daily random roll to give an active user a specific role\n\nintended to give users send_messages permissions in a channel, but can be used for anything')

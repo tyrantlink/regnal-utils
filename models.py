@@ -25,6 +25,7 @@ class _ProjectConfig(BaseModel):
 	contact_email:str # email used in pk user agent
 	dm_proxy_channel:int # channel to proxy dms to, must be forum channel
 	primary_bot_id:int # primary bot id, should be the only bot with access to dm proxy channel
+	scripted_auto_response_repo:str # repo to pull scripted auto responses from and to direct users to
 	base_version:list[int] # base version to start with when counting commits
 	start_commit:str # commit to start counting from
 
@@ -35,9 +36,6 @@ class _ProjectWebhooks(BaseModel):
 	updates:str # announcement channel for updates
 	errors:str # text channel for error logging
 	dm_proxy:str # webhook to send dms to
-
-class _ProjectEnv(BaseModel):
-	saucenao_key:str # saucenao api key
 
 class _ProjectMongo(BaseModel):
 	uri:str # mongo uri
@@ -51,14 +49,30 @@ class _ProjectParseable(BaseModel):
 	logstream:str # hypervisor logstream
 	logstream_padding:int # padding to keep all loggers the same length; -1 = auto
 
+class _ProjectSauceNao(BaseModel):
+	api_key:str # saucenao api key
+
+class _ProjectGoogleCloud(BaseModel):
+	type:str # google cloud type
+	project_id:str # google cloud project id
+	private_key_id:str # google cloud private key id
+	private_key:str # google cloud private key
+	client_email:str # google cloud client email
+	client_id:str # google cloud client id
+	auth_uri:str # google cloud auth uri
+	token_uri:str # google cloud token uri
+	auth_provider_x509_cert_url:str # google cloud auth provider x509 cert url
+	client_x509_cert_url:str # google cloud client x509 cert url
+
 class Project(BaseModel):
 	config:_ProjectConfig
 	bot:BotData
 	webhooks:_ProjectWebhooks
-	env:_ProjectEnv
 	mongo:_ProjectMongo
 	api:_ProjectAPI
 	parseable:_ProjectParseable
+	saucenao:_ProjectSauceNao
+	google_cloud:_ProjectGoogleCloud
 
 class Version(BaseModel):
 	semantic:str

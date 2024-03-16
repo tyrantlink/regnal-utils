@@ -1,27 +1,24 @@
 from pydantic import BaseModel,Field
+from datetime import timedelta
 from beanie import Document
 
 class INFBase(Document):
 	class Settings:
 		name = 'inf'
+		use_cache = True
 		validate_on_save = True
 		use_state_management = True
+		cache_expiration_time = timedelta(hours=1)
 	id:str
-
-class INFVersion(INFBase):
-	value:str = Field(description='version number x.x.x')
 
 class INFTextCorrection(INFBase):
 	value:dict[str,str] = Field(description='dictionary of text corrections')
-
-class INFCommandUsage(INFBase):
-	value:dict[str,int] = Field(description='dictionary of command usage')
 
 class INFExcuses(INFBase):
 	class INFExcuseObject(BaseModel):
 		intro:list[str] = Field(description='list of excuse intros')
 		scapegoat:list[str] = Field(description='list of scapegoats')
-		delays:list[str] = Field(description='list of delays')
+		delay:list[str] = Field(description='list of delays')
 
 	value:INFExcuseObject = Field(description='excuse object')
 
@@ -38,46 +35,28 @@ class INFEightBall(INFBase):
 class INFBees(INFBase):
 	value:list[str] = Field(description='list of bees :wink:')
 
-class INFSauceNao(INFBase):
-	value:str = Field(description='sauce nao api key')
-
 class Inf:
 	@staticmethod
-	async def version() -> INFVersion:
-		"""inf version"""
-		return await INFVersion.find_one({'_id': 'version'})
-
-	@staticmethod
-	async def text_correction() -> INFTextCorrection:
+	async def text_correction() -> dict[str,str]:
 		"""inf text correction"""
-		return await INFTextCorrection.find_one({'_id': 'text_correction'})
+		return (await INFTextCorrection.find_one({'_id': 'text_correction'})).value
 
 	@staticmethod
-	async def command_usage() -> INFCommandUsage:
-		"""inf command usage"""
-		return await INFCommandUsage.find_one({'_id': 'command_usage'})
-
-	@staticmethod
-	async def excuses() -> INFExcuses:
+	async def excuses() -> INFExcuses.INFExcuseObject:
 		"""inf excuses"""
-		return await INFExcuses.find_one({'_id': 'excuses'})
+		return (await INFExcuses.find_one({'_id': 'excuses'})).value
 
 	@staticmethod
-	async def insults() -> INFInsults:
+	async def insults() -> INFInsults.INFInsultObject:
 		"""inf insults"""
-		return await INFInsults.find_one({'_id': 'insults'})
+		return (await INFInsults.find_one({'_id': 'insults'})).value
 
 	@staticmethod
-	async def eight_ball() -> INFEightBall:
+	async def eight_ball() -> list[str]:
 		"""inf eight ball"""
-		return await INFEightBall.find_one({'_id': 'eight_ball'})
+		return (await INFEightBall.find_one({'_id': 'eight_ball'})).value
 
 	@staticmethod
-	async def bees() -> INFBees:
+	async def bees() -> list[str]:
 		"""inf bees"""
-		return await INFBees.find_one({'_id': 'bees'})
-
-	@staticmethod
-	async def saucenao() -> INFSauceNao:
-		"""inf saucenao"""
-		return await INFSauceNao.find_one({'_id': 'saucenao'})
+		return (await INFBees.find_one({'_id': 'bees'})).value

@@ -1,4 +1,4 @@
-from .documents.inf import Inf,INFVersion,INFTextCorrection,INFCommandUsage,INFExcuses,INFInsults,INFEightBall,INFBees,INFSauceNao
+from .documents.inf import Inf,INFTextCorrection,INFExcuses,INFInsults,INFEightBall,INFBees
 from .documents import User,Guild,AutoResponse,AutoResponseFileMask,Log
 from .documents.ext.enums import AutoResponseMethod
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -32,7 +32,7 @@ class MongoDatabase:
 		self._client:_Database = AsyncIOMotorClient(mongo_uri,serverSelectionTimeoutMS=5000)['regnal']
 
 	async def connect(self) -> None:
-		await init_beanie(self._client, document_models=[User,Guild,AutoResponse,AutoResponseFileMask,Log,INFVersion,INFTextCorrection,INFCommandUsage,INFExcuses,INFInsults,INFEightBall,INFBees,INFSauceNao])
+		await init_beanie(self._client,document_models=[User,Guild,AutoResponse,AutoResponseFileMask,Log,INFTextCorrection,INFExcuses,INFInsults,INFEightBall,INFBees])
 
 	@property
 	def new(self) -> _MongoNew:

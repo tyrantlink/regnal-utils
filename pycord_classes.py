@@ -21,9 +21,17 @@ class View(_DView):
 			if item not in self.children: self.add_item(item)
 
 	async def on_error(self,error:Exception,item:Item,interaction:Interaction) -> None:
+		notes = getattr(error,'__notes__',[])
+		if 'already_raised' in notes: return
+		error.add_note('already_raised')
 		embed = Embed(title='an error has occurred!',color=0xff6969)
 		embed.add_field(name='error',value=str(error))
-		await interaction.respond(embed=embed,ephemeral=True)
+		
+		if interaction.response.is_done():
+			await interaction.followup.send(embed=embed,ephemeral=True)
+		else:
+			await interaction.response.send_message(embed=embed,ephemeral=True)
+		if not 'suppress' in notes: raise error
 
 class BackButton(Button):
 	def __init__(self,views:list['SubView']) -> None:
@@ -45,8 +53,10 @@ class SubView(View):
 		super().__init__()
 		self.master = master
 		self.client = master.client
-		self.back_button:BackButton
 		self.embed = Embed(title='this should always be overridden in either __init__ or __ainit__',color=0xff6969)
+
+	async def back_button(self) -> None:
+		... #? i want the linter to make it purple
 
 	async def interaction_check(self,interaction:Interaction) -> bool:
 		return (
@@ -58,7 +68,7 @@ class SubView(View):
 		pass
 
 	async def __on_back__(self) -> None:
-		"""called when back button is pressed"""
+		"""called when this view is returned to from a back button press"""
 		pass
 
 SUBVIEW_TYPE = TypeVar('SUBVIEW_TYPE',bound=SubView)
@@ -88,4 +98,5 @@ class CustomModal(_DModal):
 		self.stop()
 
 class SubCog:
-	client:'Client'
+	def __init__(self) -> None:
+		raise NotImplementedError('Do not instantiate a SubCog')
