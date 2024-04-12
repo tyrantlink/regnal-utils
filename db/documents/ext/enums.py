@@ -29,7 +29,6 @@ class AUCooldownMode(Enum):
 class AutoResponseMethod(Enum):
 	def __str__(self) -> str:
 		return self.name
-
 	exact = 0
 	contains = 1
 	regex = 2 # different from data.regex, this method uses raw matching rather than adding word delimitation

@@ -115,7 +115,7 @@ class Guild(Document):
 			questions:int = Field(0,ge=0,description='total questions asked')
 			tts:int = Field(0,ge=0,description='total tts characters used')
 
-		activity:dict[str,dict[str,int]] = Field({},max_length=30,description='activity data for at most last 30 days\n\nformat {day:{user_id:count}}')
+		activity:dict[str,dict[str,int]] = Field({},max_length=31,description='activity data for at most last 30 days\n\nformat {day:{user_id:count}}')
 		auto_responses:GuildDataAutoResponses = Field(GuildDataAutoResponses(),description='auto response data')
 		permissions:dict[str,list[str]] = Field({'@everyone':[]},description='permissions for user/roles\n\nformat {id:[permission1,...]}')
 		qotd:GuildDataQOTD = Field(GuildDataQOTD(),description='qotd data')
