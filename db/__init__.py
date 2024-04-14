@@ -12,7 +12,7 @@ class _MongoNew:
 		return User(id=id,username=username)
 
 	@staticmethod
-	def guild(id:int,name:str,owner:int) -> Guild:
+	def guild(id:int,name:str,owner:int|None) -> Guild:
 		return Guild(id=id,name=name,owner=owner)
 
 	@staticmethod
@@ -42,13 +42,27 @@ class MongoDatabase:
 	def inf(self) -> Inf:
 		return Inf
 
-	async def user(self,_id:int|str,ignore_cache:bool=False) -> User|None:
+	async def user(self,_id:int|str,ignore_cache:bool=False,create_if_not_found:bool=False) -> User|None:
 		"""user documents"""
-		return await User.find_one({'_id': _id},ignore_cache=ignore_cache)
+		user = await User.find_one({'_id': _id},ignore_cache=ignore_cache)
+		if user is not None:
+			return user
+		if not create_if_not_found:
+			return None
+		user = self.new.user(_id,'')
+		await user.insert()
+		return user
 
-	async def guild(self,_id:int|str,ignore_cache:bool=False) -> Guild|None:
+	async def guild(self,_id:int|str,ignore_cache:bool=False,create_if_not_found:bool=False) -> Guild|None:
 		"""guild documents"""
-		return await Guild.find_one({'_id': _id},ignore_cache=ignore_cache)
+		guild = await Guild.find_one({'_id': _id},ignore_cache=ignore_cache)
+		if guild is not None:
+			return guild
+		if not create_if_not_found:
+			return None
+		guild = self.new.guild(_id,'',None)
+		await guild.insert()
+		return guild
 
 	async def auto_response(self,_id:int|str,ignore_cache:bool=False) -> AutoResponse|None:
 		"""auto response documents"""

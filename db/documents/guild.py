@@ -85,6 +85,12 @@ class Guild(Document):
 		saucenao:GuildConfigSauceNao = Field(GuildConfigSauceNao(),description='sauce nao options')
 
 	class GuildData(BaseModel):
+		class GuildDataAutoResponses(BaseModel):
+			whitelist:list[int] = Field([],description='channels where auto responses are whitelisted')
+			blacklist:list[int] = Field([],description='channels where auto responses are blacklisted')
+			overrides:dict[str,dict] = Field({},description='auto response overrides')
+			imported_scripts:list[str] = Field([],description='scripted auto responses that have been imported')
+
 		class GuildDataQOTD(BaseModel):
 			last:int = Field(0,ge=0,description='day of last question sent')
 			last_thread:Optional[int] = Field(None,description='thread id of last question sent')
@@ -95,12 +101,6 @@ class Guild(Document):
 		class GuildDataTalkingStick(BaseModel):
 			current:Optional[int] = Field(None,description='user currently holding the talking stick')
 			last:int = Field(0,ge=0,description='day of last talking stick given')
-
-		class GuildDataAutoResponses(BaseModel):
-			whitelist:list[int] = Field([],description='channels where auto responses are whitelisted')
-			blacklist:list[int] = Field([],description='channels where auto responses are blacklisted')
-			overrides:dict[str,dict] = Field({},description='auto response overrides')
-			imported_scripts:list[str] = Field([],description='scripted auto responses that have been imported')
 
 		class GuildDataHideCommands(BaseModel):
 			whitelist:list[int] = Field([],description='channels where commands are whitelisted')
@@ -119,9 +119,10 @@ class Guild(Document):
 		auto_responses:GuildDataAutoResponses = Field(GuildDataAutoResponses(),description='auto response data')
 		permissions:dict[str,list[str]] = Field({'@everyone':[]},description='permissions for user/roles\n\nformat {id:[permission1,...]}')
 		qotd:GuildDataQOTD = Field(GuildDataQOTD(),description='qotd data')
-		tts:GuildDataTTS = Field(GuildDataTTS(),description='text-to-speech data')
 		talking_stick:GuildDataTalkingStick = Field(GuildDataTalkingStick(),description='talking stick data')
 		hide_commands:GuildDataHideCommands = Field(GuildDataHideCommands(),description='hide commands data')
+		tts:GuildDataTTS = Field(GuildDataTTS(),description='text-to-speech data')
+		leaderboards:dict[str,dict[str,int]] = Field({},description='leaderboard data')
 		statistics:GuildDataStatistics = Field(GuildDataStatistics(),description='guild statistics')
 		flags:int = Field(0,description='flags the guild has')
 		extra:dict[str,Any] = Field({},description='extra data')
@@ -129,6 +130,7 @@ class Guild(Document):
 	id:int = Field(description='guild\'s discord id')
 	name:str = Field(description='guild\'s discord name')
 	owner:int|None = Field(description='guild\'s discord owner id')
+	attached_bot:int|None = Field(None,description='bot attached to the guild')
 	config:GuildConfig = Field(GuildConfig(),description='guild config')
 	data:GuildData = Field(GuildData(),description='guild data')
 
