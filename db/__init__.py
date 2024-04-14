@@ -22,7 +22,7 @@ class _MongoNew:
 	@staticmethod
 	def au_mask(au:str) -> AutoResponseFileMask:
 		return AutoResponseFileMask(au=au)
-	
+
 	@staticmethod
 	def log(id:int,data:dict) -> Log:
 		return Log(id=id,data=data)
@@ -71,7 +71,7 @@ class MongoDatabase:
 	async def au_mask(self,_id:PydanticObjectId,ignore_cache:bool=False) -> AutoResponseFileMask|None:
 		"""auto response file mask documents"""
 		return await AutoResponseFileMask.find_one({'_id':_id},ignore_cache=ignore_cache)
-	
+
 	async def log(self,_id:int|str,ignore_cache:bool=False) -> Log|None:
 		"""log documents"""
 		return await Log.find_one({'_id': _id},ignore_cache=ignore_cache)

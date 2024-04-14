@@ -8,7 +8,7 @@ from beanie import Document
 class AutoResponse(Document):
 	def __eq__(self, other: object) -> bool:
 		return isinstance(other, type(self)) and self.id == other.id
-	
+
 	def __hash__(self) -> int:
 		return hash(self.id)
 
