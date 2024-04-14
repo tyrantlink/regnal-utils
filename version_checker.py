@@ -13,6 +13,7 @@ async def _find_start_commit(
 	if not start_commit: return commits
 	for commit in commits.copy():
 		if commit == start_commit:
+			del commits[commit]
 			break
 		del commits[commit]
 	else:
