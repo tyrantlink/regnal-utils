@@ -51,9 +51,6 @@ class Guild(Document):
 			member_unban:bool = Field(False,description='enable/disable logging of member unbans')
 			pluralkit_support:bool = Field(False,description='suppress messages deleted by pluralkit')
 
-		class GuildConfigPermissions(BaseModel):
-			advanced:bool = Field(False,description='enable/disable the advanced permission system')
-
 		class GuildConfigQOTD(BaseModel):
 			enabled:bool = Field(False,description='enable/disable qotd\n\nif disabled, all qotd will be disabled')
 			channel:Optional[int] = Field(None)
@@ -78,7 +75,6 @@ class Guild(Document):
 		general:GuildConfigGeneral = Field(GuildConfigGeneral(),description='general options')
 		auto_responses:GuildConfigAutoResponses = Field(GuildConfigAutoResponses(),description='auto response options')
 		logging:GuildConfigLogging = Field(GuildConfigLogging(),description='logging options')
-		permissions:GuildConfigPermissions = Field(GuildConfigPermissions(),description='advanced permission options')
 		qotd:GuildConfigQOTD = Field(GuildConfigQOTD(),description='qotd options')
 		tts:GuildConfigTTS = Field(GuildConfigTTS(),description='text-to-speech options')
 		talking_stick:GuildConfigTalkingStick = Field(GuildConfigTalkingStick(),description='talking stick options')
