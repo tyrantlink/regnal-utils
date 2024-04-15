@@ -53,6 +53,7 @@ class User(Document):
 
 		class UserDataStatistics(BaseModel):
 			messages:dict[str,int] = Field({},description='message counts by guild id\n\nlegacy data under _legacy')
+			command_usage:int = Field(0,description='commands used')
 			api_usage:int = Field(0,description='api calls made')
 			tts_usage:int = Field(0,description='tts characters used')
 
