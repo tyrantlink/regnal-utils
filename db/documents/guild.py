@@ -42,7 +42,7 @@ class Guild(Document):
 			enabled:bool = Field(False,description='enable/disable logging\n\nif disabled, all logging will be disabled\nif enabled you can view logs on https://logs.regn.al')
 			channel:Optional[int] = Field(None,description='channel used for some logging\nfull logs still visible on https://logs.regn.al')
 			log_bots:bool = Field(False,description='enable/disable logging of bot messages')
-			log_commands:bool = Field(False,description='enable/disable logging of command usage')
+			log_commands:bool = Field(True,description='enable/disable logging of command usage')
 			deleted_messages:bool = Field(False,description='enable/disable logging of deleted messages')
 			edited_messages:bool = Field(False,description='enable/disable logging of edited messages')
 			member_join:bool = Field(False,description='enable/disable logging of member joins')
