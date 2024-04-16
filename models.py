@@ -28,6 +28,7 @@ class _ProjectConfig(BaseModel):
 	scripted_auto_response_repo:str # repo to pull scripted auto responses from and to direct users to
 	base_version:list[int] # base version to start with when counting commits
 	start_commit:str # commit to start counting from
+	live_reload:bool # whether to live reload changes
 
 class _ProjectWebhooks(BaseModel):
 	support:str # forum channel for issues and suggestions

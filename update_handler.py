@@ -67,13 +67,17 @@ class UpdateHandler:
 		extensions = next(walk('extensions'))[1]
 		for extension in extensions:
 			if extension in bot_data.disabled_extensions: continue
-			self.bots[dir].load_extension(f'extensions.{extension}')
+			self.bots[bot_name].load_extension(f'extensions.{extension}')
 		if bot_data.custom_extension:
-			self.bots[dir].load_extension(f'bots.{dir}')
+			self.bots[bot_name].load_extension(f'bots.{dir}')
 		await self.bots[bot_name].start()
 
 	async def bot_restart(self,bot_name:str) -> None:
-		if (bot:=self.bots.get(bot_name,None)) is None: await self.bot_start(bot_name)
+		if (bot:=self.bots.get(bot_name,None)) is None:
+			self.log.info(f'{bot_name} is not running; starting')
+			await self.bot_start(bot_name)
+			return
+
 		self.log.info(f'restarting {bot_name}')
 		await bot.close()
 		del self.bots[bot_name]
@@ -89,7 +93,7 @@ class UpdateHandler:
 			bot.load_extension(extension)
 
 	async def change_monitor(self) -> None:
-		if not LIVE_RELOAD: return
+		if not self.base_project['config']['live_reload']: return
 		self.log.info('started change monitor')
 		async for changes in awatch('.'):
 			actions = set()
