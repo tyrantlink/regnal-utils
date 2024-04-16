@@ -4,7 +4,6 @@ from utils.models import BotData,BotType,Project
 from aiohttp.web_response import Response
 from aiohttp.web_request import Request
 from hmac import new,compare_digest
-from config import LIVE_RELOAD
 from watchfiles import awatch
 from utils.log import Logger
 from hashlib import sha256
