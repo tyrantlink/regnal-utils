@@ -37,6 +37,7 @@ class Guild(Document):
 			cooldown:int = Field(0,ge=0,description='cooldown between auto responses in seconds')
 			cooldown_mode:AUCooldownMode = Field(AUCooldownMode.channel,description='cooldown mode\n\nnone: no cooldown\nuser: cooldown per user\nchannel: cooldown per channel\nguild: cooldown server-wide')
 			allow_cross_guild_responses:bool = Field(False,description='allow custom auto responses from other guilds to be used (using the --au argument)\n\nvery, very dangerous permission, allows users to send arbitrary auto responses\nuse at your own risk.')
+			custom_only:bool = Field(False,description='only use custom auto responses, ignoring all other types')
 
 		class GuildConfigLogging(BaseModel):
 			enabled:bool = Field(False,description='enable/disable logging\n\nif disabled, all logging will be disabled\nif enabled you can view logs on https://logs.regn.al')
