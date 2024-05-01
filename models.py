@@ -65,6 +65,10 @@ class _ProjectGoogleCloud(BaseModel):
 	auth_provider_x509_cert_url:str # google cloud auth provider x509 cert url
 	client_x509_cert_url:str # google cloud client x509 cert url
 
+class _ProjectDeveloper(BaseModel): 
+	dev_mode:bool # if enabled, only loads certain extensions
+	dev_extensions:list[str] # extensions to load in dev mode
+
 class Project(BaseModel):
 	config:_ProjectConfig
 	bot:BotData
@@ -74,6 +78,7 @@ class Project(BaseModel):
 	parseable:_ProjectParseable
 	saucenao:_ProjectSauceNao
 	google_cloud:_ProjectGoogleCloud
+	developer:_ProjectDeveloper
 
 class Version(BaseModel):
 	semantic:str
