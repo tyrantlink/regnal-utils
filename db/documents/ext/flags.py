@@ -1,8 +1,8 @@
 from enum import IntFlag
 
 class UserFlags(IntFlag):
-	AUTO_RESPONSE_BANNED = 1 << 0 # force ignore all auto responses
-	ADMIN                = 1 << 1 # bypass all permission checks
+	ADMIN                = 1 << 0 # bypass all permission checks
+	AUTO_RESPONSE_BANNED = 1 << 1 # force ignore all auto responses
 	UNLIMITED_TTS        = 1 << 2 # bypass all TTS length checks
 
 class APIFlags(IntFlag):
