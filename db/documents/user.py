@@ -61,6 +61,7 @@ class User(Document):
 		auto_responses:UserDataAutoResponses = Field(UserDataAutoResponses(),description='auto response data')
 		statistics:UserDataStatistics = Field(UserDataStatistics(),description='user statistics')
 		dm_threads:dict[str,int] = Field({},description='dictionary of dm threads {bot_id:thread_id}')
+		modmail_threads:dict[str,int] = Field({},description='dictionary of modmail threads {"guild_id:modmail_id":latest_read_message_index}')
 		flags:int = Field(0,description='flags the user has')
 		extra:dict[str,Any] = Field({},description='extra data')
 

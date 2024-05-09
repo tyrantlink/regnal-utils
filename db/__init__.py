@@ -1,5 +1,5 @@
 from .documents.inf import Inf,INFTextCorrection,INFExcuses,INFInsults,INFEightBall,INFBees
-from .documents import User,Guild,AutoResponse,AutoResponseFileMask,Log,QOTDResponseMetric
+from .documents import User,Guild,AutoResponse,AutoResponseFileMask,Log,QOTDResponseMetric,ModMail
 from .documents.ext.enums import AutoResponseMethod
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.database import Database as _Database
@@ -32,7 +32,19 @@ class MongoDatabase:
 		self._client:_Database = AsyncIOMotorClient(mongo_uri,serverSelectionTimeoutMS=5000)['regnal']
 
 	async def connect(self) -> None:
-		await init_beanie(self._client,document_models=[User,Guild,AutoResponse,AutoResponseFileMask,Log,QOTDResponseMetric,INFTextCorrection,INFExcuses,INFInsults,INFEightBall,INFBees])
+		await init_beanie(self._client,document_models=[
+			User,
+			Guild,
+			AutoResponse,
+			AutoResponseFileMask,
+			Log,
+			ModMail,
+			QOTDResponseMetric,
+			INFTextCorrection,
+			INFExcuses,
+			INFInsults,
+			INFEightBall,
+			INFBees])
 
 	@property
 	def new(self) -> _MongoNew:
@@ -64,14 +76,18 @@ class MongoDatabase:
 		await guild.insert()
 		return guild
 
-	async def auto_response(self,_id:int|str,ignore_cache:bool=False) -> AutoResponse|None:
+	async def auto_response(self,_id:str,ignore_cache:bool=False) -> AutoResponse|None:
 		"""auto response documents"""
 		return await AutoResponse.find_one({'_id': _id},ignore_cache=ignore_cache)
 
 	async def au_mask(self,_id:PydanticObjectId,ignore_cache:bool=False) -> AutoResponseFileMask|None:
 		"""auto response file mask documents"""
 		return await AutoResponseFileMask.find_one({'_id':_id},ignore_cache=ignore_cache)
-	
+
+	async def modmail(self,_id:str,ignore_cache:bool=False) -> ModMail|None:
+		"""modmail documents"""
+		return await ModMail.find_one({'_id': _id},ignore_cache=ignore_cache)
+
 	async def qotd_metric(self,_id:int|str,ignore_cache:bool=False) -> QOTDResponseMetric:
 		"""qotd metric documents"""
 		metric = await QOTDResponseMetric.find_one({'_id': _id},ignore_cache=ignore_cache)

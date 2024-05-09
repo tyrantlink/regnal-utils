@@ -70,6 +70,11 @@ class Guild(Document):
 			time:str = Field('09:00',min_length=5,max_length=5,pattern=r'^\d{2}:\d{2}$',description='time of day talking stick is announced\n\nformat: HH:MM (24 hour)\nfollows guild set timezone')
 			announcement_message:str = Field('congrats {user} you have the talking stick.',max_length=200,description='message sent when a user gets the talking stick\n\nformat: {user} is replaced with the user\'s mention')
 
+		class GuildConfigModMail(BaseModel):
+			enabled:bool = Field(False,description='enable/disable mod mail')
+			channel:Optional[int] = Field(None,description='forum channel used for mod mail')
+			allow_anonymous:bool = Field(True,description='allow users to send mod mail anonymously')
+
 		class GuildConfigSauceNao(BaseModel):
 			api_key:Optional[str] = Field(None,description='sauce nao api key\n\nif not set, the default api key will be used (with a very low limit)]\n\nget an api key at https://saucenao.com/user.php?page=account-upgrades')
 
@@ -79,6 +84,7 @@ class Guild(Document):
 		qotd:GuildConfigQOTD = Field(GuildConfigQOTD(),description='qotd options')
 		tts:GuildConfigTTS = Field(GuildConfigTTS(),description='text-to-speech options')
 		talking_stick:GuildConfigTalkingStick = Field(GuildConfigTalkingStick(),description='talking stick options')
+		modmail:GuildConfigModMail = Field(GuildConfigModMail(),description='mod mail options')
 		saucenao:GuildConfigSauceNao = Field(GuildConfigSauceNao(),description='sauce nao options')
 
 	class GuildData(BaseModel):
@@ -120,6 +126,7 @@ class Guild(Document):
 		hide_commands:GuildDataHideCommands = Field(GuildDataHideCommands(),description='hide commands data')
 		tts:GuildDataTTS = Field(GuildDataTTS(),description='text-to-speech data')
 		leaderboards:dict[str,dict[str,int]] = Field({},description='leaderboard data')
+		modmail_threads:dict[str,int] = Field({},description='mod mail threads\n\nformat {thread_id:modmail_id}')
 		statistics:GuildDataStatistics = Field(GuildDataStatistics(),description='guild statistics')
 		flags:int = Field(0,description='flags the guild has')
 		extra:dict[str,Any] = Field({},description='extra data')

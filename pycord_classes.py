@@ -59,6 +59,7 @@ class SubView(View):
 		... #? i want the linter to make it purple
 
 	async def interaction_check(self,interaction:Interaction) -> bool:
+		if getattr(self,'user',None) is None: return True
 		return (
 			interaction.user.id == self.user.id or
 			interaction.user.id in self.client.owner_ids and self.client.project.config.dev_bypass)
