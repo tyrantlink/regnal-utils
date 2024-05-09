@@ -25,5 +25,6 @@ class ModMail(Document):
 	title:str = Field(description='modmail title')
 	message:int|None = Field(description='reported message id')
 	thread:Optional[int] = Field(None,description='thread id')
+	send_all:bool = Field(False,description='whether every message is sent to the user, or just pings')
 	closed:bool = Field(False,description='whether the modmail is closed')
 	messages:list[ModMailMessage] = Field([],description='modmail messages')
