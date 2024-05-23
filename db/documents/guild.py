@@ -31,6 +31,7 @@ class Guild(Document):
 			hide_commands:TWBFMode = Field(TWBFMode.false,description='commands will only be visible to the user\n\neven disabled, some commands with sensitive information will still be hidden\n\ntrue: commands will always be hidden\nwhitelist: commands will be hidden in selected channels\nblacklist: commands will be hidden in all channels except selected channels\nfalse: commands will never be force hidden')
 			embed_color:str = Field('69ff69',min_length=6,max_length=6,pattern=r'^[a-fA-F\d]{6}$',description='color used by embeds\n\nif not set, the default color will be used')
 			timezone:str = Field('America/Los_Angeles',min_length=2,max_length=32,description='timezone used for events\n\nplease refer to [this list on wikipedia](<https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>) for a list of options')
+			replace_media_links:bool = Field(False,description='replaces media links with urls that have better discord embed support')
 
 		class GuildConfigAutoResponses(BaseModel):
 			enabled:TWBFMode = Field(TWBFMode.true,description='enable/disable auto responses\n\ntrue: auto responses enabled in all channels\nwhitelist: auto responses enabled in selected channels\nblacklist: auto responses disabled in selected channels\nfalse: auto responses disabled in all channels')
