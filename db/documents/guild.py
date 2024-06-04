@@ -51,6 +51,7 @@ class Guild(Document):
 			member_leave:bool = Field(False,description='enable/disable logging of member leaves')
 			member_ban:bool = Field(False,description='enable/disable logging of member bans')
 			member_unban:bool = Field(False,description='enable/disable logging of member unbans')
+			activity_roles:bool = Field(False,description='enable/disable logging of activity role changes')
 			pluralkit_support:bool = Field(False,description='suppress messages deleted by pluralkit')
 
 		class GuildConfigQOTD(BaseModel):
@@ -76,6 +77,12 @@ class Guild(Document):
 			channel:Optional[int] = Field(None,description='forum channel used for mod mail')
 			allow_anonymous:bool = Field(True,description='allow users to send mod mail anonymously')
 
+		class GuildConfigActivityRoles(BaseModel):
+			enabled:bool = Field(False,description='enable/disable activity roles')
+			role:Optional[int] = Field(None,description='role given to active users')
+			timeframe:int = Field(7,ge=1,description='number of days to look back for activity')
+			max_roles:int = Field(10,ge=1,description='maximum number of roles to give')
+
 		class GuildConfigSauceNao(BaseModel):
 			api_key:Optional[str] = Field(None,description='sauce nao api key\n\nif not set, the default api key will be used (with a very low limit)]\n\nget an api key at https://saucenao.com/user.php?page=account-upgrades')
 
@@ -86,6 +93,7 @@ class Guild(Document):
 		tts:GuildConfigTTS = Field(GuildConfigTTS(),description='text-to-speech options')
 		talking_stick:GuildConfigTalkingStick = Field(GuildConfigTalkingStick(),description='talking stick options')
 		modmail:GuildConfigModMail = Field(GuildConfigModMail(),description='mod mail options')
+		activity_roles:GuildConfigActivityRoles = Field(GuildConfigActivityRoles(),description='activity roles options')
 		saucenao:GuildConfigSauceNao = Field(GuildConfigSauceNao(),description='sauce nao options')
 
 	class GuildData(BaseModel):
@@ -113,6 +121,9 @@ class Guild(Document):
 		class GuildDataTTS(BaseModel):
 			banned:list[int] = Field([],description='users banned from using tts')
 
+		class GuildDataActivityRoles(BaseModel):
+			last_day:int = Field(0,ge=0,description='day of last activity role update')
+
 		class GuildDataStatistics(BaseModel):
 			messages:int = Field(0,ge=0,description='total messages sent')
 			commands:int = Field(0,ge=0,description='total commands used')
@@ -126,6 +137,7 @@ class Guild(Document):
 		talking_stick:GuildDataTalkingStick = Field(GuildDataTalkingStick(),description='talking stick data')
 		hide_commands:GuildDataHideCommands = Field(GuildDataHideCommands(),description='hide commands data')
 		tts:GuildDataTTS = Field(GuildDataTTS(),description='text-to-speech data')
+		activity_roles:GuildDataActivityRoles = Field(GuildDataActivityRoles(),description='activity roles data')
 		leaderboards:dict[str,dict[str,int]] = Field({},description='leaderboard data')
 		modmail_threads:dict[str,int] = Field({},description='mod mail threads\n\nformat {thread_id:modmail_id}')
 		statistics:GuildDataStatistics = Field(GuildDataStatistics(),description='guild statistics')
