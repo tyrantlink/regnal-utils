@@ -82,6 +82,7 @@ class Guild(Document):
 			role:Optional[int] = Field(None,description='role given to active users')
 			timeframe:int = Field(7,ge=1,description='number of days to look back for activity')
 			max_roles:int = Field(10,ge=1,description='maximum number of roles to give')
+			ignored_roles:list[int] = Field([],description='roles that are ignored for activity roles')
 
 		class GuildConfigSauceNao(BaseModel):
 			api_key:Optional[str] = Field(None,description='sauce nao api key\n\nif not set, the default api key will be used (with a very low limit)]\n\nget an api key at https://saucenao.com/user.php?page=account-upgrades')
