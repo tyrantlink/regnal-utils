@@ -154,3 +154,17 @@ class Guild(Document):
 	def get_current_day(self) -> int:
 		_guild_timezone = timezone(self.config.general.timezone)
 		return (datetime.now(_guild_timezone)-datetime(2021,5,5,tzinfo=_guild_timezone)).days
+	
+	def get_day_in(
+		self,
+		days:int=0,
+		hours:int=0,
+		minutes:int=0,
+		seconds:int=0
+	) -> int:
+		_guild_timezone = timezone(self.config.general.timezone)
+		return (
+			datetime.now(_guild_timezone)
+			+timedelta(days=days,hours=hours,minutes=minutes,seconds=seconds)
+			-datetime(2021,5,5,tzinfo=_guild_timezone)
+		).days
