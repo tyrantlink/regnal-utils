@@ -1,15 +1,16 @@
 from enum import Enum
 
-class GatewayOpCode(Enum): # comments from client perspective
-	UNDEFINED = 0 # reserved
-	ACK = 1 # server -> client
-	HEARTBEAT = 2 # server <- client
-	REQUEST = 3 # server -> client
-	RESPONSE = 4 # server <- client
+
+class GatewayOpCode(Enum):  # comments from client perspective
+    UNDEFINED = 0  # reserved
+    ACK = 1  # server -> client
+    HEARTBEAT = 2  # server <- client
+    REQUEST = 3  # server -> client
+    RESPONSE = 4  # server <- client
 
 
 class GatewayRequestType(Enum):
-	UNDEFINED = 0
-	RELOAD_AU = 1
-	SEND_MESSAGE = 2
-	BOT_INFO = 3
+    UNDEFINED = 0
+    RELOAD_AU = 1
+    SEND_MESSAGE = 2
+    BOT_INFO = 3
