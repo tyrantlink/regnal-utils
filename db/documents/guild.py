@@ -62,6 +62,14 @@ class Guild(Document):
                 default=False,
                 description='replaces media links with urls that have better discord embed support'
             )
+            moderator_role: Optional[int] = Field(
+                default=None,
+                description='role that will be pinged for emergency situations (e.g. anti scam bot protection)'
+            )
+            anti_scam_bot: bool = Field(
+                default=False,
+                description='enable/disable anti scam bot\n\nif enabled, detect self bots and prompt admins to ban them'
+            )
 
         class GuildConfigAutoResponses(BaseModel):
             enabled: TWBFMode = Field(
