@@ -379,6 +379,11 @@ class Guild(Document):
                 ge=0,
                 description='total tts characters used'
             )
+            good_bots: int = Field(
+                default=0,
+                ge=0,
+                description='total good bot responses'
+            )
 
         activity: dict[str, dict[str, int]] = Field(
             default={},
