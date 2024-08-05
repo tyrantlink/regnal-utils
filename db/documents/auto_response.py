@@ -66,6 +66,10 @@ class AutoResponse(Document):
             default=False,
             description='auto response trigger is deleted'
         )
+        reply: bool = Field(
+            default=False,
+            description='reply to the message that triggered the auto response'
+        )
         user: Optional[int] = Field(
             default=None,
             description='auto response user'
