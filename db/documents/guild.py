@@ -73,7 +73,7 @@ class Guild(Document):
 
         class GuildConfigAutoResponses(BaseModel):
             enabled: TWBFMode = Field(
-                default=TWBFMode.true,
+                default=TWBFMode.false,
                 description='enable/disable auto responses\n\ntrue: auto responses enabled in all channels\nwhitelist: auto responses enabled in selected channels\nblacklist: auto responses disabled in selected channels\nfalse: auto responses disabled in all channels'
             )
             cooldown: int = Field(
