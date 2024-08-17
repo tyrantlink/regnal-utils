@@ -70,6 +70,10 @@ class AutoResponse(Document):
             default=False,
             description='reply to the message that triggered the auto response'
         )
+        suppress_trigger_embeds: bool = Field(
+            default=False,
+            description='suppress trigger message embeds, intended mainly for scripts'
+        )
         user: Optional[int] = Field(
             default=None,
             description='auto response user'
