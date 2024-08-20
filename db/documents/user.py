@@ -79,6 +79,10 @@ class User(Document):
                 default=True,
                 description='silently corrects text so it\'s more accurately pronounced'
             )
+            read_filenames: bool = Field(
+                default=True,
+                description='read filenames when tts is enabled (e.g. "USER sent crab.png")'
+            )
 
         class UserConfigAutoResponses(BaseModel):
             disabled: list[str] = Field(
