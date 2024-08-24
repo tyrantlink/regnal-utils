@@ -72,7 +72,7 @@ class User(Document):
             speaking_rate: float = Field(
                 default=0.8,
                 ge=0.25,
-                le=4,
+                le=1.5,
                 description='speaking rate used by tts'
             )
             text_correction: bool = Field(
