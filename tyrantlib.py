@@ -73,26 +73,31 @@ def convert_time(seconds: int | float, decimal=15) -> str:
     return ', '.join(res)
 
 
-def get_line_count(input_path: str, excluded_dirs: list = None, excluded_files: list = None) -> int:
-    if excluded_dirs is None:
-        excluded_dirs = []
-
-    if excluded_files is None:
-        excluded_files = []
+async def get_line_count(
+        input_path: str,
+        excluded_dirs: list | None = None,
+        excluded_files: list | None = None,
+        file_extensions: list | None = None
+) -> int:
+    excluded_dirs = excluded_dirs or []
+    excluded_files = excluded_files or []
+    file_extensions = file_extensions or []
 
     if isdir(input_path):
         line_count = 0
         for path, dirs, files in walk(input_path):
             dirs[:] = [d for d in dirs if d not in excluded_dirs]
             files[:] = [f for f in files if f not in excluded_files]
+            files[:] = [f for f in files if f.split(
+                '.')[-1] in file_extensions]
 
             for file in files:
-                line_count += get_line_count('/'.join([path, file]))
+                line_count += await get_line_count('/'.join([path, file]))
 
         return line_count
     else:
-        with open(input_path, 'r') as f:
-            file = f.read()
+        async with open(input_path, 'r') as f:
+            file = await f.read()
 
         file = sub(r'^\s*"""(?:[^"]|"{1,2}(?!"))*"""\s*', '', file, flags=8)
         file = sub(r'^\s*#.*', '', file, flags=8)
