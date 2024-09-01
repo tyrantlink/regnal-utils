@@ -14,11 +14,12 @@ class TTSCache(Document):
         name = 'tts_cache'
         use_cache = True
         validate_on_save = True
+        use_state_management = True
         cache_expiration_time = timedelta(minutes=30)
         #! make it a timeseries document when https://github.com/BeanieODM/beanie/issues/1005 is fixed
         # timeseries = TimeSeriesConfig(
         #     time_field='ts',
-        #     expire_after_seconds=3600
+        #     expire_after_seconds=2592000 # 30 days
         # )
 
     id: str = Field(description='TTSMessage hash')
