@@ -39,6 +39,8 @@ class _ProjectConfig(BaseModel):
     """github webhook secret"""
     pluralkit_token: str
     """pluralkit token"""
+    plural_token: str
+    """/plu/ral token"""
     contact_email: str
     """email used in pk user agent"""
     dm_proxy_channel: int
